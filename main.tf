@@ -51,6 +51,24 @@ resource "aws_wafv2_web_acl" "main" {
               name = excluded_rule.value
             }
           }
+
+          dynamic "scope_down_statement" {
+            for_each = rule.value.scope_down_statement
+            content {
+              dynamic "byte_match_statement" {
+                for_each = try(scope_down_statement.value.byte_match_statement, {})
+                content {
+                  positional_constraint = try(byte_match_statement.value.positional_constraint, null)
+                  search_string         = try(byte_match_statement.value.search_string, null)
+                  field_to_match        = try(byte_match_statement.value.field_to_match, null)
+                  text_transformation {
+                    priority = try(byte_match_statement.value.text_transformation.priority, null)
+                    type     = try(byte_match_statement.value.text_transformation.type, null)
+                  }
+                }
+              }
+            }
+          }
         }
       }
 
