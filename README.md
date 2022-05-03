@@ -1,5 +1,3 @@
-# terraform-aws-wafv2
-
 Creates AWS WAFv2 ACL and supports the following
 
 * AWS Managed Rule Sets
